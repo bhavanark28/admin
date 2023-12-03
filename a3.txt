@@ -1,0 +1,309 @@
+
+R = int(input("Enter the number of rows:"))
+C = int(input("Enter the number of columns:"))
+ 
+# Initialize matrix
+matrix = []
+print("Enter the entries rowwise:")
+ 
+# For user input
+for i in range(R):          # A for loop for row entries
+    a =[]
+    for j in range(C):  # A for loop for column entries
+         print("row")
+         a.append(float(input()))
+    matrix.append(a)
+Enter the number of rows:10
+Enter the number of columns:2
+Enter the entries rowwise:
+row
+2.4
+row
+3.5
+row
+6.
+row
+3.5
+row
+4.8
+row
+3.7
+row
+5.6
+row
+4.7
+row
+6.4
+row
+5.3
+row
+6.4
+row
+4.3
+row
+5.2
+row
+5.6
+row
+4.3
+row
+6.3
+row
+4.7
+row
+4.3
+row
+5.4
+row
+6.6
+for i in range(R):
+    for j in range(C):
+        print(matrix[i][j], end = " ")
+    print()
+2.4 3.5 
+6.0 3.5 
+4.8 3.7 
+5.6 4.7 
+6.4 5.3 
+6.4 4.3 
+5.2 5.6 
+4.3 6.3 
+4.7 4.3 
+5.4 6.6 
+import math
+
+def check(wc , dis , mat , cen):
+    ans = False
+    r = 3
+    R = 10
+    for k in range(r):
+        x = cen[k][0]
+        y = cen[k][1]
+        for i in range(R):
+            a = mat[i][0]
+            b = mat[i][1]
+            d = math.sqrt((x-a)**2 + (y-b)**2)
+            if d < dis[i][0] :
+                ans = True
+                dis[i][0] = d
+                wc[i][0] = k+1
+   
+
+def calculate(centroid , mat ,wc):
+    r = 3
+    R = 10
+   
+    ans = False
+   
+    for i in range(r):
+        suma = 0.0
+        sumb = 0.0
+        l = 0
+        for j in range(R) :
+            if wc[j][0] == i+1:
+                suma += mat[j][0]
+                sumb += mat[j][1]
+                l+=1
+        if(suma/l != centroid[i][0] or sumb/l != centroid[i][1]):
+            ans = True
+           # print(str(suma) + " " + str(sumb))
+            centroid[i][0] = suma/l
+            centroid[i][1] = sumb/l
+               
+    return ans
+
+centroid = [[3.0 , 3.2],
+            [4 , 3.7],
+            [5, 3.0]]
+
+distance = []
+
+which_cluster = []
+
+r = 10;
+c = 1;
+
+for i in range(r):
+    a = []
+    b = []
+    for j in range(c):
+        a.append(-1)
+        b.append(10000000.0)
+    which_cluster.append(a)
+    distance.append(b)
+   
+iteration = 0;
+
+while True:
+    check(which_cluster , distance , matrix , centroid)
+    if calculate(centroid , matrix , which_cluster) == False :
+        break
+    iteration += 1
+    print("After iteration " + str(iteration) + " clusters are")
+    for j in range(10):
+        print(str(matrix[j][0]) + " " + str(matrix[j][1]) + " cluster-> " + str(which_cluster[j][0]) + " distance-> " + str(distance[j][0]))
+   
+    print("New Centroids")
+    for i in range(3):
+        print(str(centroid[i][0]) + " " + str(centroid[i][1]))
+
+    
+After iteration 1 clusters are
+2.4 3.5 cluster-> 1 distance-> 0.6708203932499369
+6.0 3.5 cluster-> 3 distance-> 1.118033988749895
+4.8 3.7 cluster-> 3 distance-> 0.728010988928052
+5.6 4.7 cluster-> 3 distance-> 1.8027756377319946
+6.4 5.3 cluster-> 3 distance-> 2.692582403567252
+6.4 4.3 cluster-> 3 distance-> 1.91049731745428
+5.2 5.6 cluster-> 2 distance-> 2.2472205054244228
+4.3 6.3 cluster-> 2 distance-> 2.61725046566048
+4.7 4.3 cluster-> 2 distance-> 0.9219544457292886
+5.4 6.6 cluster-> 2 distance-> 3.2202484376209233
+New Centroids
+2.4 3.5
+4.9 5.699999999999999
+5.839999999999999 4.3
+import numpy as np
+import pandas as pd
+from copy import deepcopy
+k=3
+import random as rd
+import matplotlib.pyplot as plt
+X = pd.read_csv('/home/dslab/Downloads/kmeans.csv')
+print(X)
+    X1   X2
+0  5.9  3.2
+1  4.6  2.9
+2  6.2  2.8
+3  4.7  3.2
+4  5.5  4.2
+5  5.0  3.0
+6  4.9  3.1
+7  6.7  3.1
+8  5.1  3.8
+9  6.0  3.0
+X = X[["X1","X2"]]
+#Visualise data points
+plt.scatter(X["X1"],X["X2"],c='black')
+plt.xlabel('AnnualIncome')
+plt.ylabel('Loan Amount (In Thousands)')
+plt.show()
+
+x1 = X['X1'].values
+x2 = X['X2'].values
+x1
+array([5.9, 4.6, 6.2, 4.7, 5.5, 5. , 4.9, 6.7, 5.1, 6. ])
+x2
+array([3.2, 2.9, 2.8, 3.2, 4.2, 3. , 3.1, 3.1, 3.8, 3. ])
+X = np.array(list(zip(x1, x2)))
+print(X)
+[[5.9 3.2]
+ [4.6 2.9]
+ [6.2 2.8]
+ [4.7 3.2]
+ [5.5 4.2]
+ [5.  3. ]
+ [4.9 3.1]
+ [6.7 3.1]
+ [5.1 3.8]
+ [6.  3. ]]
+C_x = [6.2, 6.6 ,6.5]
+C_y = [3.2, 3.7, 3.0]
+Centroid = np.array(list(zip(C_x, C_y)), dtype=np.float32)
+print("Initial Centroids")
+print(Centroid.shape)
+Initial Centroids
+(3, 2)
+Centroid
+array([[6.2, 3.2],
+       [6.6, 3.7],
+       [6.5, 3. ]], dtype=float32)
+type(Centroid)
+numpy.ndarray
+Centroid_old = np.zeros(Centroid.shape)
+print(Centroid_old)
+[[0. 0.]
+ [0. 0.]
+ [0. 0.]]
+clusters = np.zeros(len(X))
+print(clusters)
+[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[0,1,2,0,0,1,2,1,1,0]
+[0, 1, 2, 0, 0, 1, 2, 1, 1, 0]
+def euclidean(a,b, ax=1):
+    return np.linalg.norm(a-b, axis=ax)
+error = euclidean(Centroid, Centroid_old,None)
+print(error)
+12.537144692236463
+iterr = 0
+while error != 0:
+        # Assigning each value to its closest cluster
+        iterr = iterr + 1
+        for i in range(len(X)):
+            #print("Data Points")
+            #print(X[i])
+            distances = euclidean(X[i], Centroid)
+            #print("Distances")
+            #print(distances)
+            cluster = np.argmin(distances)
+            clusters[i] = cluster
+        Centroid_old = deepcopy(Centroid)
+        print("Old Centroid")
+        print(Centroid_old)
+            
+        
+        # Finding the new centroids by taking the Mean
+        for p in range(k):
+            points = [X[j] for j in range(len(X)) if clusters[j] == p]
+            Centroid[p] = np.mean(points, axis=0)
+        print(" New Centroids after ", iterr," Iteration \n", Centroid)
+        error = euclidean(Centroid, Centroid_old, None)
+        print("Error  ... ",error)
+        print("Data points belong to which cluster")
+        print(clusters)
+        print("********************************************************")
+Old Centroid
+[[6.2 3.2]
+ [6.6 3.7]
+ [6.5 3. ]]
+ New Centroids after  1  Iteration 
+ [[5.1714287 3.1714287]
+ [5.5       4.2      ]
+ [6.45      2.95     ]]
+Error  ...  1.5886393
+Data points belong to which cluster
+[0. 0. 2. 0. 1. 0. 0. 2. 0. 0.]
+********************************************************
+Old Centroid
+[[5.1714287 3.1714287]
+ [5.5       4.2      ]
+ [6.45      2.95     ]]
+ New Centroids after  2  Iteration 
+ [[4.8   3.05 ]
+ [5.3   4.   ]
+ [6.2   3.025]]
+Error  ...  0.5484787
+Data points belong to which cluster
+[2. 0. 2. 0. 1. 0. 0. 2. 1. 2.]
+********************************************************
+Old Centroid
+[[4.8   3.05 ]
+ [5.3   4.   ]
+ [6.2   3.025]]
+ New Centroids after  3  Iteration 
+ [[4.8   3.05 ]
+ [5.3   4.   ]
+ [6.2   3.025]]
+Error  ...  0.0
+Data points belong to which cluster
+[2. 0. 2. 0. 1. 0. 0. 2. 1. 2.]
+********************************************************
+X = pd.read_csv('/home/dslab/Downloads/kmeans.csv')
+X = X[["X1","X2"]]
+#Visualise data points
+plt.scatter(X["X1"],X["X2"],c=clusters)
+plt.xlabel('AnnualIncome')
+plt.ylabel('Loan Amount (In Thousands)')
+plt.show()
+
+ 
